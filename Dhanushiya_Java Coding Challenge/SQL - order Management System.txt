@@ -1,0 +1,72 @@
+creating tables:
+
+CREATE TABLE users (
+    userId INT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL 
+);
+
+
+CREATE TABLE products (
+    productId INT PRIMARY KEY,
+    productName VARCHAR(100) NOT NULL,
+    description VARCHAR(255),
+    price DOUBLE NOT NULL,
+    quantityInStock INT NOT NULL,
+    type VARCHAR(50) CHECK (type IN ('Electronics', 'Clothing')) NOT NULL );
+
+
+CREATE TABLE electronics (
+    productId INT PRIMARY KEY, 
+    brand VARCHAR(100),
+    warrantyPeriod INT,
+    FOREIGN KEY (productId) REFERENCES products(productId)
+);
+
+
+CREATE TABLE clothing (
+    productId INT PRIMARY KEY, 
+    size VARCHAR(20),
+    color VARCHAR(20),
+    FOREIGN KEY (productId) REFERENCES products(productId)
+);
+
+
+CREATE TABLE orders (
+    orderId INT PRIMARY KEY AUTO_INCREMENT,
+    userId INT,
+    productId INT,
+    orderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(userId),
+    FOREIGN KEY (productId) REFERENCES products(productId)
+);
+
+
+Inserting sample data:
+
+INSERT INTO users (userId, username, password, role) 
+VALUES (1, 'doe', 'admin123', 'Admin');
+
+
+INSERT INTO users (userId, username, password, role) 
+VALUES (2, 'smith', 'password123', 'User');
+
+
+INSERT INTO products (productId, productName, description, price, quantityInStock, type) 
+VALUES (1, 'Laptop', 'High-end gaming laptop', 1500.00, 10, 'Electronics'),
+       (2, 'T-Shirt', 'Cotton T-shirt', 20.00, 50, 'Clothing');
+
+
+INSERT INTO electronics (productId, brand, warrantyPeriod) 
+VALUES (1, 'BrandX', 2);
+
+
+INSERT INTO clothing (productId, size, color) 
+VALUES (2, 'M', 'Blue');
+
+
+INSERT INTO orders (userId, productId) 
+VALUES (2, 1), -- User 2 orders Laptop
+       (2, 2); -- User 2 orders T-Shirt
+
